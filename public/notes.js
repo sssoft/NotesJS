@@ -1,11 +1,19 @@
 angular.module('app', []);
 
-angular.module('app').controller('NotesController', NotesController);
+(function() {
+    angular.module('app').controller('NotesController', ['$http', NotesController]);
 
-function NotesController() {
-    this.notes = [
-        {text: "Note number One"},
-        {text: "Note number Two"},
-        {text: "Note number Three"}
-    ];
-}
+    function NotesController($http) {
+        var self = this;
+        self.notes = [];
+
+        var update = function () {
+            $http.get("/notes")
+                .success(function (notes) {
+                    self.notes = notes;
+                })
+        };
+
+        update();
+    }
+})();
