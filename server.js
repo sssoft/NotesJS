@@ -21,6 +21,8 @@ app.get("/greeting", function (req, res) {
 });
 
 app.get("/notes", function (req, res) {
+    console.log("Notes:");
+    console.log(req.session.notes || []);
     res.send(req.session.notes || []);
 });
 
@@ -50,4 +52,28 @@ app.delete("/notes", function (req, res) {
 
     req.session.notes = updatedNotesList;
     res.end();
-})
+});
+
+app.put("/notes", function (req, res) {
+    var id = req.body.id;
+    var notes = req.session.notes || [];
+    var updatedNotesList = [];
+
+    console.log(JSON.stringify(req.body));
+    console.log('Send to top : ' + id);
+    for (var i = 0; i < notes.length; i++) {
+        if (notes[i].id == id) {
+            updatedNotesList.push(notes[i]);
+        }
+    }
+
+    for (var i = 0; i < notes.length; i++) {
+        if (notes[i].id != id) {
+            updatedNotesList.push(notes[i]);
+        }
+    }
+
+    console.log(updatedNotesList);
+    req.session.notes = updatedNotesList;
+    res.end();
+});

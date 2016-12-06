@@ -30,5 +30,12 @@ angular.module('app', []);
                     update();
                 });
         };
+
+        self.top = function (id) {
+            $http.put("/notes", {'id' : id})
+                .success(function () {
+                    update();
+                });
+        }
     }
 })();

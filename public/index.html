@@ -9,8 +9,10 @@
 </head>
 <body ng-controller="NotesController as notesCtrl">
     <div ng-repeat="note in notesCtrl.notes">
-        <p class="note">{{note.text}}</p>
+        <p class="note">{{note.text}}
         <button ng-click="notesCtrl.remove(note.id)">Remove</button>
+        <button ng-click="notesCtrl.top(note.id)">Send to top</button>
+        </p>
     </div>
 
     Add note:<br />
