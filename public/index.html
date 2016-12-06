@@ -10,6 +10,11 @@
 <body ng-controller="NotesController as notesCtrl">
     <div ng-repeat="note in notesCtrl.notes">
         <p class="note">{{note.text}}</p>
+        <button ng-click="notesCtrl.remove(note.id)">Remove</button>
     </div>
+
+    Add note:<br />
+    <textarea rows="10" cols="50" ng-model="notesCtrl.text"></textarea>
+    <button ng-click="notesCtrl.add()">Add note</button>
 </body>
 </html>
