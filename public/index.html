@@ -3,26 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <title>Notes application</title>
+    <link rel="stylesheet" href="libs/bootstrap.min.css" />
     <link rel="stylesheet" href="styles.css" />
     <script src="libs/angular.js"></script>
     <script src="notes.js"></script>
 </head>
 <body ng-controller="NotesController as notesCtrl">
-    <select ng-model="order">
-        <option value="order">Sort by order</option>
-        <option value="text">Sort by alphabetical</option>
-        <option value="date">Sort by date</option>
-    </select>
-    <div ng-repeat="note in notesCtrl.notes | orderBy : order">
-        <p class="note"><span>{{note.date | date: 'HH:mm dd.MM.yyyy'}}</span>
-            {{note.text}}
-        <button ng-click="notesCtrl.remove(note._id)">Remove</button>
-        <button ng-click="notesCtrl.top(note._id)">Send to top</button>
+
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <div class="navbar-brand">Notes tutorial app</div>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <form class="navbar-form navbar-right">
+                <div class="form-group">
+                    <input type="text" placeholder="Username" class="form-control">
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="Password" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-success">Sign in</button>
+            </form>
+        </div><!--/.navbar-collapse -->
+    </div>
+</nav>
+
+
+<div class="jumbotron">
+    <div class="container">
+        <h2>
+            <span class="glyphicon glyphicon-edit"></span>
+            Keep your notes in order
+        </h2>
+        <p>
+            A simple application to keep your own notes in order.
         </p>
     </div>
+</div>
 
-    Add note:<br />
-    <textarea rows="10" cols="50" ng-model="notesCtrl.text"></textarea>
-    <button ng-click="notesCtrl.add()">Add note</button>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Add your note to {{activeSection}}</h3>
+                </div>
+
+                <div class="panel-body">
+                    <div class="form-group">
+                        <textarea style="min-width:100%;min-height:200px" class="form-control" ng-model="notesCtrl.text"></textarea>
+                    </div>
+                    <button ng-click="notesCtrl.add()" class="btn btn-primary">Post note</button>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Notes
+                    <select ng-model="order">
+                        <option value="order">Sort by order</option>
+                        <option value="text">Sort by alphabetical</option>
+                        <option value="date">Sort by date</option>
+                    </select>
+                </div>
+
+                <ul class="list-group" ng-repeat="note in notesCtrl.notes | orderBy : order">
+                    <li class="list-group-item">
+                        <span>{{note.date | date: 'HH:mm dd.MM.yyyy'}}</span>
+                        {{note.text}}
+                        <button ng-click="notesCtrl.remove(note._id)">Remove</button>
+                        <button ng-click="notesCtrl.top(note._id)">Send to top</button>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+            <!-- Sections -->
+        </div>
+    </div>
+</div>
 </body>
 </html>
