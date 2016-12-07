@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="libs/bootstrap.min.css" />
     <link rel="stylesheet" href="styles.css" />
     <script src="libs/angular.js"></script>
+    <script src="libs/angular-drag-and-drop-lists.js"></script>
     <script src="notes.js"></script>
 </head>
 <body ng-controller="NotesController as notesCtrl">
@@ -86,8 +87,12 @@
 
         <div class="col-md-4">
             <!-- Sections -->
-            <ul class="list-group">
-                <li href="#" class="list-group-item" ng-repeat="section in notesCtrl.sections"
+            <input ng-model="notesCtrl.sectionsFilter">
+            <ul class="list-group" dnd-list="notesCtrl.sections">
+                <li href="#" class="list-group-item"
+                    dnd-draggable="section"
+                    dnd-moved="notesCtrl.sections.splice($index, 1); notesCtrl.writeSections();"
+                    ng-repeat="section in notesCtrl.sections | filter: notesCtrl.sectionsFilter"
                     ng-click="notesCtrl.showSection(section)"
                     ng-class="{active: section.title == notesCtrl.activeSection}">
                     {{section.title}}

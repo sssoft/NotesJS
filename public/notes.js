@@ -1,4 +1,4 @@
-angular.module('app', []);
+angular.module('app', ['dndLists']);
 
 (function() {
     angular.module('app').controller('NotesController', ['$http', NotesController]);
