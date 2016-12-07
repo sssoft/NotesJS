@@ -24,6 +24,9 @@ db.open(function () {
     db.collection('notes', function (error, notes) {
         db.notes = notes;
     });
+    db.collection('sections', function (error, sections) {
+        db.sections = sections;
+    })
 });
 
 app.listen(3000);
@@ -77,5 +80,29 @@ app.put("/notes", function (req, res) {
         db.notes.updateOne({_id: ObjectID(id)}, {$set:{order: order}});
         console.log("Reorder note[" + id + "].order = " + order);
         res.end();
+    });
+});
+
+
+app.get("/sections", function (req, res) {
+    db.sections.find(req.query).toArray(function (err, items) {
+        res.send(items);
+    });
+});
+
+app.post("/sections/replace", function(req, resp) {
+    if (req.body.length == 0) { // do not clear the list
+        res.end();
+    }
+    db.sections.remove({}, function(err, res) {
+        if (err) {
+            console.log(err);
+        }
+        db.sections.insert(req.body, function(err, res) {
+            if (err) {
+                console.log("Error after insert", err);
+            }
+            resp.end();
+        });
     });
 });
