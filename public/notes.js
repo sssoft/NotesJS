@@ -26,7 +26,7 @@ angular.module('app', []);
 
         self.remove = function(id) {
             $http.delete("/notes", {params: {'id' : id}})
-                .success(function () {
+                .success(function (res) {
                     update();
                 });
         };

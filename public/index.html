@@ -8,10 +8,16 @@
     <script src="notes.js"></script>
 </head>
 <body ng-controller="NotesController as notesCtrl">
-    <div ng-repeat="note in notesCtrl.notes">
-        <p class="note">{{note.text}}
-        <button ng-click="notesCtrl.remove(note.id)">Remove</button>
-        <button ng-click="notesCtrl.top(note.id)">Send to top</button>
+    <select ng-model="order">
+        <option value="order">Sort by order</option>
+        <option value="text">Sort by alphabetical</option>
+        <option value="date">Sort by date</option>
+    </select>
+    <div ng-repeat="note in notesCtrl.notes | orderBy : order">
+        <p class="note"><span>{{note.date | date: 'HH:mm dd.MM.yyyy'}}</span>
+            {{note.text}}
+        <button ng-click="notesCtrl.remove(note._id)">Remove</button>
+        <button ng-click="notesCtrl.top(note._id)">Send to top</button>
         </p>
     </div>
 
