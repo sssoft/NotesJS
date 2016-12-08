@@ -4,8 +4,9 @@
         <form class="css-form" name="userForm" novalidate>
             <div class="form-group">
                 <label for="userName">User name</label>
-                <input type="text" class="form-control" id="userName"
-                       name="userName" placeholder="Username" ng-model="user.userName" ng-required />
+                <input type="text" class="form-control" id="userName" name="userName" placeholder="Username"
+                    unique-user ng-model="user.userName" ng-required />
+                <span ng-show="userForm.userName.$dirty && userForm.userName.$error.unique">User name is not unique</span>
             </div>
 
             <div class="form-group">
