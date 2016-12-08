@@ -1,12 +1,12 @@
-angular.module('app', ['dndLists']);
-
 (function() {
-    angular.module('app').controller('NotesController', ['$http', NotesController]);
+    angular.module('app').controller('NotesController', ['$http', '$routeParams', '$location', NotesController]);
 
-    function NotesController($http) {
+    function NotesController($http, $routeParams, $location) {
         var self = this;
         self.notes = [];
         self.newSection = "";
+
+        self.activeSection = $routeParams.section;
 
         var update = function() {
             var params = {params: {section: self.activeSection}};
@@ -58,6 +58,7 @@ angular.module('app', ['dndLists']);
 
         self.showSection = function(section) {
             self.activeSection = section.title;
+            $location.path(section.title);
             update();
         };
 
