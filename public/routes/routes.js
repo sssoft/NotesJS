@@ -1,5 +1,6 @@
-var module = angular.module('app', ['dndLists', 'ngRoute']);
-module.config(function ($routeProvider) {
+angular.module('app', ['dndLists', 'ngRoute']);
+
+angular.module('app').config(function ($routeProvider) {
     $routeProvider
         .when('/', {
             templateUrl: 'routes/notes/notes.html',
@@ -11,7 +12,7 @@ module.config(function ($routeProvider) {
         })
         .when('/register', {
             templateUrl: 'routes/userForm/userForm.html',
-            controller: 'UserFormController'
+            controller: 'UserFormCtrl'
         })
         .when('/:section?', {
             templateUrl: 'routes/notes/notes.html',
