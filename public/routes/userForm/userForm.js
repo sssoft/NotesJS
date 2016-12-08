@@ -18,21 +18,23 @@ angular.module('app').directive("matchTo", function() {
     };
 });
 
-angular.module('app').directive('uniqueUser', function($http, $timeout) {
+angular.module('app').directive('uniqueUser', function($http, $q) {
     var timer;
     return {
         restrict: 'A',
         require: 'ngModel',
-        link: function(scope, elem, attr, ctrl) {
-            scope.$watch(attr.ngModel, function(value) {
-                if (timer) $timeout.cancel(timer);
-                timer = $timeout(function(){
-                    $http.get('/checkUser?user=' + value)
-                        .success(function(result) {
-                            ctrl.$setValidity('unique', result);
-                        });
-                }, 200);
-            })
+        link: function(scope, elem, attr, ngModel) {
+            ngModel.$asyncValidators.unique =
+                function(modelValue, viewValue) {
+                    var value = modelValue || viewValue;
+                    return $http.get('/checkUser?user=' + value).
+                    then(function(response) {
+                        if (!response.data) {
+                            return $q.reject();
+                        }
+                        return true;
+                    });
+                };
         }
-    }
+    };
 });
