@@ -1,6 +1,14 @@
 angular.module('app')
-    .controller("UserFormCtrl", function($scope, $http) {
+    .controller("UserFormCtrl", function($scope, $http, $location) {
         $scope.user = {};
+
+        $scope.submitForm = function() {
+            $http.post("/users", $scope.user)
+                .success(function(data) {
+                    console.log("saved!");
+                    $location.path("/");
+                });
+        }
     });
 
 angular.module('app').directive("matchTo", function() {

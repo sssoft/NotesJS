@@ -27,6 +27,9 @@ db.open(function () {
     db.collection('sections', function (error, sections) {
         db.sections = sections;
     })
+    db.collection('users', function(error, users) {
+        db.users = users;
+    });
 });
 
 app.listen(3000);
@@ -109,4 +112,11 @@ app.post("/sections/replace", function(req, resp) {
 
 app.get("/checkUser", function(req,res) {
     res.send(req.query.user.length > 2);
+});
+
+app.post("/users", function(req, res) {
+    db.users.insert(req.body, function(resp) {
+        req.session.userName = req.body.userName;
+        res.end();
+    });
 });
