@@ -19,5 +19,4 @@ angular.module('app').config(function ($routeProvider) {
             controller: 'NotesController'
         })
         .otherwise({redirectTo: "/"});
-
 });

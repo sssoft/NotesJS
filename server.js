@@ -34,11 +34,16 @@ db.open(function () {
 
 app.listen(3000);
 
+function setUserQuery(req) {
+    req.query.userName = req.session.userName || "demo";
+}
+
 app.get("/greeting", function (req, res) {
     res.send("Hello, " + req.query.name + "! I'm server");
 });
 
 app.get("/notes", function (req, res) {
+    setUserQuery(req);
     db.notes.find(req.query).toArray(function (err, items) {
         res.send(items);
     })
@@ -47,6 +52,7 @@ app.get("/notes", function (req, res) {
 app.post("/notes", function (req, res) {
     var note = req.body;
     note.date = new Date();
+    note.userName = req.session.userName || "demo";
 
     var cursor = db.notes.find({}).sort({order: -1}).limit(1);
     cursor.on("data", function (last_note) {
@@ -88,26 +94,23 @@ app.put("/notes", function (req, res) {
 
 
 app.get("/sections", function (req, res) {
-    db.sections.find(req.query).toArray(function (err, items) {
-        res.send(items);
-    });
+    var userName = req.session.userName || "demo";
+    db.users.find({userName:userName})
+        .toArray(function(err, items) {
+            var user = items[0];
+            if (user.sections === undefined) {
+                user.sections = [];
+            }
+            res.send(user.sections);
+        });
 });
 
 app.post("/sections/replace", function(req, resp) {
-    if (req.body.length == 0) { // do not clear the list
-        res.end();
-    }
-    db.sections.remove({}, function(err, res) {
-        if (err) {
-            console.log(err);
-        }
-        db.sections.insert(req.body, function(err, res) {
-            if (err) {
-                console.log("Error after insert", err);
-            }
+    var userName = req.session.userName || "demo";
+    db.users.update({userName:userName}, {$set:{sections:req.body}},
+        function() {
             resp.end();
         });
-    });
 });
 
 app.get("/checkUser", function(req, res) {
@@ -121,9 +124,28 @@ app.get("/checkUser", function(req, res) {
     });
 });
 
+app.get("/authUser", function (req, res) {
+   res.send(req.session.userName);
+});
+
 app.post("/users", function(req, res) {
     db.users.insert(req.body, function(resp) {
         req.session.userName = req.body.userName;
         res.end();
     });
+});
+
+app.post("/login", function(req, res) {
+    db.users.find({userName:req.body.login, password:req.body.password})
+        .toArray(function(err, items) {
+            if (items.length > 0) {
+                req.session.userName = req.body.login;
+            }
+            res.send(items.length > 0);
+        });
+});
+
+app.get("/logout", function(req, res) {
+    req.session.userName = null;
+    res.end();
 });
