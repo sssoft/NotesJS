@@ -110,8 +110,15 @@ app.post("/sections/replace", function(req, resp) {
     });
 });
 
-app.get("/checkUser", function(req,res) {
-    res.send(req.query.user.length > 2);
+app.get("/checkUser", function(req, res) {
+    var cursor = db.users.find({userName: req.query.user});
+    var unique = true;
+    cursor.on("data", function() {
+        unique = false;
+    });
+    cursor.once("end", function () {
+        res.send(unique && req.query.user.length > 2);
+    });
 });
 
 app.post("/users", function(req, res) {
